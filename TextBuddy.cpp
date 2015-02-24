@@ -1,13 +1,9 @@
 #include "TextBuddy.h"
 
+TextBuddy::TextBuddy(void){}
 
-TextBuddy::TextBuddy(void)
-{
-}
+TextBuddy::~TextBuddy(void){}
 
-TextBuddy::~TextBuddy(void)
-{
-}
 
 void TextBuddy::display(vector<string>&text){
 	if (text.empty()){
@@ -56,6 +52,10 @@ void TextBuddy::updateFile(vector<string>&text){
 		number++;
 	}
 	write.close();
+}
+
+string TextBuddy::getFileName(){
+	return fileName;
 }
 
 void TextBuddy::run(){

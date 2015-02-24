@@ -24,6 +24,7 @@ public:
 	void run();
 	void makeFile();
 	void updateFile(vector<string>&);
+	string getFileName();
 };
 
 #endif
