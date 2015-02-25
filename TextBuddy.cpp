@@ -1,5 +1,8 @@
 #include "TextBuddy.h"
 
+#define NULL "";
+#define START_NUMBER 1;
+
 TextBuddy::TextBuddy(void){}
 
 TextBuddy::~TextBuddy(void){}
@@ -9,7 +12,7 @@ void TextBuddy::display(vector<string>&text){
 	if (text.empty()){
 		cout << fileName << " is empty" << endl;
 	}
-	int number = 1;
+	int number = START_NUMBER;
 	vector<string>::iterator iter;
 	for(iter = text.begin(); iter!= text.end(); ++iter){
 		cout << number << ". " << *iter << endl;
@@ -37,6 +40,7 @@ void TextBuddy::setName(string newName){
 	makeFile();
 }
 
+//makeFile creates a .txt file with the user-specified name
 void TextBuddy::makeFile(){
 	ofstream write(fileName);
 }
@@ -45,7 +49,7 @@ void TextBuddy::makeFile(){
 void TextBuddy::updateFile(vector<string>&text){
 	ofstream write;
 	write.open(fileName);
-	int number = 1;
+	int number = START_NUMBER;
 	vector<string>::iterator iter;
 	for(iter = text.begin(); iter!= text.end(); ++iter){
 		write << number << ". " << *iter << endl;
@@ -58,42 +62,61 @@ string TextBuddy::getFileName(){
 	return fileName;
 }
 
-void TextBuddy::run(){
-	string input;
-	string command ="";
-	string addedSentence;
-	vector<string> text;
-	int number;
+void TextBuddy::showWelcomeMessage(string fileName){
 	cout <<"Welcome to TextBuddy. " << fileName << " is ready for use" << endl;
-	
-	while (input != "exit"){
-		cout <<"command: ";
-		getline (cin, input);
+}
 
-		if (input == "exit"){
-			break;
-		}  else if (input == "display"){
-			display(text);
-		}  else if (input == "clear"){
-			clear(text);
-		} else { //exctract method from input
-			for (int i=0; i<input.length(); i++){
+void getInput(string &input){
+	getline (cin, input);
+}
+
+void parseInput(string &input, string &command, string &addedSentence){
+	for (int i=0; i<input.length(); i++){
 				if (input[i] == ' '){
 					command = input.substr(0,i);
 					addedSentence = input.substr(i+1);
 					break;
 				}
-			}
-			if (command == "add"){
-				add(addedSentence, text);
-			}
-			else if (command == "delete"){
-				istringstream(addedSentence) >> number; 
-				deleteSentence(text, number);
-			}
-		}
-		command = "";
 	}
+}
+
+void askForCommand(){
+	cout <<"command: ";
+}
+
+void TextBuddy::processInput(string input, vector<string>&text, string command, string addedSentence){
+	int number;
+	while (input != "exit"){
+			askForCommand();
+			getInput(input);
+			if (input == "exit"){
+				break;
+			}  else if (input == "display"){
+				display(text);
+			}  else if (input == "clear"){
+				clear(text);
+			} else { //exctract command and addedSentence from input
+				parseInput(input, command, addedSentence);
+				}
+				if (command == "add"){
+					add(addedSentence, text);
+				}
+				else if (command == "delete"){
+					istringstream(addedSentence) >> number; 
+					deleteSentence(text, number);
+				}
+		
+			command = NULL;
+		}
+}
+void TextBuddy::run(){
+	string input;
+	string command = NULL;
+	string addedSentence;
+	vector<string> text;
+	
+	showWelcomeMessage(fileName);
+	processInput(input, text, command, addedSentence);
 	updateFile(text);
 }
 

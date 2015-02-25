@@ -25,6 +25,8 @@ public:
 	void makeFile();
 	void updateFile(vector<string>&);
 	string getFileName();
+	void showWelcomeMessage(string);
+	void processInput(string, vector<string>&, string, string);
 };
 
 #endif
