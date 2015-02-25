@@ -38,7 +38,21 @@ namespace LibraryTest{
 			textTest.deleteSentence(actualText, 1);
 
 			Assert::AreEqual(expectedText, actualText[0]);
+		}
 
+		TEST_METHOD(sortTest){
+			TextBuddy textTest;
+			
+			string hardCodedText[] = {"Hi there", "I love you", "You love me"};
+
+			vector<string> actualText;
+			actualText.push_back("Hi there");
+			actualText.push_back("You love me");			actualText.push_back("I love you");
+			textTest.sortIt(actualText);
+
+			for(int i = 0; i <= 2; i++){
+			Assert::AreEqual(hardCodedText[i], actualText[i]);
+			}
 		}
 	};
 }
