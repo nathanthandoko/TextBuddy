@@ -47,11 +47,32 @@ namespace LibraryTest{
 
 			vector<string> actualText;
 			actualText.push_back("Hi there");
-			actualText.push_back("You love me");			actualText.push_back("I love you");
+			actualText.push_back("You love me");
+			actualText.push_back("I love you");
+
 			textTest.sortIt(actualText);
 
 			for(int i = 0; i <= 2; i++){
 			Assert::AreEqual(hardCodedText[i], actualText[i]);
+			}
+		}
+
+		TEST_METHOD(searchTest){
+			TextBuddy textTest;
+
+			string hardCodedText[] = {"I love you", "You love me"};
+
+			vector<string>temp;
+			vector<string>actualText;
+			actualText.push_back("Hi there");
+			actualText.push_back("You love me");
+			actualText.push_back("I love you");
+
+			textTest.searchIt(actualText, "love", temp);
+			textTest.sortIt(temp);
+
+			for(int i = 0; i <= 1; i++){
+			Assert::AreEqual(hardCodedText[i], temp[i]);
 			}
 		}
 	};

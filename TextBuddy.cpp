@@ -1,4 +1,5 @@
 #include "TextBuddy.h"
+#include<algorithm>
 
 #define NULL "";
 #define START_NUMBER 1;
@@ -70,11 +71,11 @@ void getInput(string &input){
 	getline (cin, input);
 }
 
-void parseInput(string &input, string &command, string &addedSentence){
+void parseInput(string &input, string &command, string &sentence){
 	for (int i=0; i<input.length(); i++){
 				if (input[i] == ' '){
 					command = input.substr(0,i);
-					addedSentence = input.substr(i+1);
+					sentence = input.substr(i+1);
 					break;
 				}
 	}
@@ -84,39 +85,67 @@ void askForCommand(){
 	cout <<"command: ";
 }
 
-void TextBuddy::processInput(string input, vector<string>&text, string command, string addedSentence){
+void TextBuddy::processInput(string input, vector<string>&text, string command, string sentence){
+	vector<string> temp; //temporary storage for search function
 	int number;
 	while (input != "exit"){
 			askForCommand();
 			getInput(input);
 			if (input == "exit"){
 				break;
-			}  else if (input == "display"){
+			}	else if (input == "display"){
 				display(text);
-			}  else if (input == "clear"){
+			}	else if (input == "clear"){
 				clear(text);
-			} else { //exctract command and addedSentence from input
-				parseInput(input, command, addedSentence);
+			}	else if (input == "sort"){
+				sortIt(text);		
+			}	else { //exctract command and sentence from input
+				parseInput(input, command, sentence);
 				}
 				if (command == "add"){
-					add(addedSentence, text);
-				}
-				else if (command == "delete"){
-					istringstream(addedSentence) >> number; 
+					add(sentence, text);
+				}	else if (command == "delete"){
+					istringstream(sentence) >> number; 
 					deleteSentence(text, number);
-				}
-		
+				}	else if (command == "search"){
+					searchIt(text, sentence, temp);
+					temp.clear(); //as it is temporary, it must be cleared after use
+				}	
 			command = NULL;
 		}
 }
+
+void TextBuddy::sortIt(vector<string>&text){
+	sort(text.begin(), text.end());
+}
+
+bool isFound(vector<string>::iterator iter, string findThis){
+	if((iter->find(findThis))!=std::string::npos){
+		return true;
+	} else return false;
+}
+
+//searchIt would search from all lines whether they contain the wanted word and stored the wanted lines in
+//a sorted manner
+void TextBuddy::searchIt(vector<string>&text, string findThis, vector<string>&temp){
+	vector<string>::iterator iter;
+	for (iter = text.begin(); iter!= text.end(); ++iter){
+		if (isFound(iter, findThis)){
+			temp.push_back(*iter);
+		}
+	}
+	sortIt(temp);
+	display(temp);
+}
+
 void TextBuddy::run(){
 	string input;
 	string command = NULL;
-	string addedSentence;
+	string sentence;
 	vector<string> text;
 	
 	showWelcomeMessage(fileName);
-	processInput(input, text, command, addedSentence);
+	processInput(input, text, command, sentence);
 	updateFile(text);
 }
 

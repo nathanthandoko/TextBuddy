@@ -27,6 +27,8 @@ public:
 	string getFileName();
 	void showWelcomeMessage(string);
 	void processInput(string, vector<string>&, string, string);
+	void sortIt(vector<string>&);
+	void searchIt(vector<string>&, string, vector<string>&);
 };
 
 #endif
